@@ -1,15 +1,20 @@
-# eslint-import-resolver-vite
+# eslint-import-resolver-vite-ts
 
-Vite module resolution plugin for `eslint-plugin-import`.
+Vite resolver for `eslint-plugin-import`
 
 This plugin will resolve the `resolve.alias` option.
 
+support **.ts** and **.js** vite config file.
+
+support write in both **__dirname** and **import.meta.url** to solve the path.
+
+***
+***Attention!this plugin could not instead of eslint-import-resolver-node! You must use that beside this plugin!***
 ### Installation
 ```sh
-npm install --save-dev eslint-import-resolver-vite
-
-# install vite-plugin-eslint if you don't already have it
-npm install --save-dev vite-plugin-eslint
+npm install --save-dev @aisonren/eslint-import-resolver-vite
+yarn add @aisonren/eslint-import-resolver-vite -D
+pnpm add @aisonren/eslint-import-resolver-vite -D
 ```
 
 ### How to use
@@ -22,7 +27,12 @@ import eslintPlugin from "vite-plugin-eslint";
 export default {
     resolve: {
         alias: {
+
+            // you could use the traditional way as before
             _: path.resolve(__dirname, "src")
+            // OR this!this way in esm is also support here!
+            '@': fileURLToPath(new URL('./src', import.meta.url))
+
         }
     },
     plugins: [
@@ -35,13 +45,15 @@ export default {
  */
 module.exports = {
     settings: {
-        // use default config:
+        // use default config path to 'vite.config.*' ends with either js or ts:
         "import/resolver": "vite",
         
         // OR use custom config:
         "import/resolver": {
-            vite: {
-                configPath: "./app1/vite.confg.dev.js"
+            '@aisonren/eslint-import-resolver-vite-ts': {
+                configPath: "./app1/vite.config.dev"
+            },
+            node:{
             }
         }
     }
@@ -53,7 +65,7 @@ module.exports = {
 - **configPath**: vite config file path.
   - Required: No
   - Type: string
-  - Default: "vite.config.js"
+  - Default: "vite.config",**the plugin will auto detect the extname and import it in right way if you omit it.**
   - By default, the plugin assumes the vite config file and eslintrc file are in the same directory.
 - **namedExport**: named export of vite config object.
   - Required: No
@@ -84,3 +96,8 @@ module.exports = {
       }
   }
   ```
+### Thanks and the copyright
+
+This project is forked form pzmosquito/eslint-import-resolver-vite in 4/18/2022,the author Peter Zhang own the copyright of the origin code.Thanks for his contribution. the details please read LICENSE-origin.
+
+I refactor it in typescript with keeping the commit history and own the other codes' copyright.the details please read LICENSE.
