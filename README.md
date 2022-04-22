@@ -9,12 +9,12 @@ support **.ts** and **.js** vite config file.
 support write in both **__dirname** and **import.meta.url** to solve the path.
 
 ***
-***Attention!this plugin could not instead of eslint-import-resolver-node! You must use that beside this plugin!***
+***Attention!this plugin could not instead of eslint-import-resolver-node! You should use that beside this plugin to avoid errors for insurance purposes***
 ### Installation
 ```sh
-npm install --save-dev @aisonren/eslint-import-resolver-vite
-yarn add @aisonren/eslint-import-resolver-vite -D
-pnpm add @aisonren/eslint-import-resolver-vite -D
+npm install --save-dev eslint-import-resolver-vite-ts
+yarn add eslint-import-resolver-vite-ts -D
+pnpm eslint-import-resolver-vite-ts -D
 ```
 
 ### How to use
@@ -46,21 +46,23 @@ export default {
 module.exports = {
     settings: {
         // use default config path to 'vite.config.*' ends with either js or ts:
-        "import/resolver": "vite",
-        
+        "import/resolver":{
+            node:{
+            },
+            'eslint-import-resolver-vite-ts': {
+            }
+        }
         // OR use custom config:
         "import/resolver": {
-            '@aisonren/eslint-import-resolver-vite-ts': {
-                configPath: "./app1/vite.config.dev"
-            },
             node:{
+            },
+            'eslint-import-resolver-vite-ts': {
+                configPath: "./app1/vite.config.dev"
             }
         }
     }
 }
-
 ```
-
 ### Config Options
 - **configPath**: vite config file path.
   - Required: No
@@ -89,7 +91,8 @@ module.exports = {
   module.exports = {
       settings: {
           "import/resolver": {
-              vite: {
+              node:{},
+              'eslint-import-resolver-vite-ts': {
                   namedExport: "viteConfig"
               }
           }

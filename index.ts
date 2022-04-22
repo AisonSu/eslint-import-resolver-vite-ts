@@ -1,5 +1,5 @@
 import path from "path";
-import { sync } from "resolve";
+import { sync,isCore} from "resolve";
 const log = require("debug")("eslint-plugin-import:resolver:vite");
 
 /**
@@ -27,10 +27,14 @@ export const resolve = function resolve(
   targetIdentify: string,
   importedPath: string,
   config: pluginConfig
-): { found: boolean; path?: string } {
+): { found: boolean; path: string|null} {
   log("resolving:", targetIdentify);
   log("in file:", importedPath);
-  try {
+  if(isCore(targetIdentify)){
+    log(`${targetIdentify} is a core module`)
+    return {found:true,path:null}
+  }
+  try { 
     // combine default config with user defined config
     const configs = {
       configPath: "vite.config",
@@ -74,6 +78,6 @@ export const resolve = function resolve(
     return { found: true, path: resolvedPath };
   } catch (err) {
     log("Path not found");
-    return { found: false };
+    return { found: false,path:null};
   }
 };
